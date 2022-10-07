@@ -34,8 +34,15 @@
 */
 
 
-const json = {"activity":"Volunteer and help out at a senior center","type":"charity","participants":1,"price":0,"link":"","key":"3920096","accessibility":0.1,
-obj1: "v1"
+const json = {
+    "activity":"Volunteer and help out at a senior center",
+    "type":"charity",
+    "participants":1,
+    "price":0,
+    "link":"",
+    "kesy":"3920096",
+    "accessibility":0.1,
+    "obj1": "v1"
 }
 
 
@@ -47,7 +54,7 @@ const alsoJson = {
     "link": "",
     "key": "4124860",
     "accessibility": 0.12,
-    obj2: "v2"
+    "obj2": "v2"
 }
 
 //Colors
@@ -67,13 +74,14 @@ const VALUE = "VALUE: "
 
 //Main function
 const compare = (obj1, obj2) =>{
-
+    
     console.clear();
     console.log(`\n`);
     var counter = 0
+    var subloopCounter = 0
     
     for(prop in obj1){
-
+        
         const KEY_1 = Object.keys(obj1)[counter]
         const VALUE_1 = obj1[prop]
         const KEY_2 = Object.keys(obj2)[counter]
@@ -82,7 +90,6 @@ const compare = (obj1, obj2) =>{
        
         
         if (Object.keys(obj1)[counter] === Object.keys(obj2)[counter]) { //if keys match
-       
 
             if (obj1[prop] == obj2[prop]) { // if values also match
                 console.log(`${counter+1})${GREEN} KEY & VALUE MATCH: ${CLEAR}`)
@@ -144,7 +151,7 @@ const compare = (obj1, obj2) =>{
                 DATA_2: VALUE_2,        //<- Data from second obj
                 KEY_COLOR: RED,         //<- Feild Colorer
                 DATA_COLOR: YELLOW,     //<- Data Colorer
-                END: NOTEND             //<- New line feature
+                END: END                //<- New line feature
             }) 
         }
         counter++
@@ -183,12 +190,13 @@ const printItem = (PARAMS) =>{
     var item2 = ""
 
     if(PARAMS.DATA_2){twoItemTAB = "\t| "; s="\b\bS: "; item2 = PARAMS.DATA_2}
-    if(PARAMS.DATA_1=="")PARAMS.DATA="*EMPTY*"
+    //if(PARAMS.DATA_1=="")PARAMS.DATA_1="*EMPTY*"
+    //if(item2)if(item2=="")item2="*EMPTY*"
     if(PARAMS.DATA)if(PARAMS.DATA_1.length < 3)TAB = "\t"
 
     console.log(
-        `  ${
-            PARAMS.KEY_COLOR         //<- Color of Key
+        `  `+
+            `${PARAMS.KEY_COLOR      //<- Color of Key
             }${PARAMS.TYPE           //<- Prints the word Value or Feild
             }${s                     //<- prints "S:" if prular
             }${PARAMS.DATA_COLOR     //<- Color of data
