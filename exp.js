@@ -1,6 +1,6 @@
-const json = {
-    "activity":"Volunteer and help out at a senior center",
-    "type":"charity",
+const wontworkyet = {
+    "a":10,
+    "t":0.5,
     "part:icipants":1,
     "price":6,
     "link":"",
@@ -9,10 +9,23 @@ const json = {
     "obj1": "v1"
 }
 
-//console.log(JSON.stringify(json));
+const works = {
+    "a":"10",
+    "t":"0.5",
+    "part:icipants":"1",
+    "price":"6",
+    "link":"",
+    "kesy":"3920096",
+    "accessibility":"0.1",
+    "obj1": "v1"
+}
 
-const jstring = JSON.stringify(json);
 
+
+const jstring = JSON.stringify(works);
+const jstring_noWorking = JSON.stringify(wontworkyet)
+
+//This WORKS!! .. but if only works if you all keys and values are wrapped in "" or '' or ``
 const stringMe = (json)=>{
 
     var object = [[],[]];
@@ -50,7 +63,7 @@ const stringMe = (json)=>{
             }
         }
         if(skip === false){
-            if(i == '"' || i == "'"){
+            if(i == '"' || i == "'" || i == ``){
                 inAString = true;
                 stringCharacter = i;
                 
@@ -66,68 +79,71 @@ const stringMe = (json)=>{
     return object;
 }
 
-const qoutationMe = (json) =>{
-    var inAString = false;
-    stringCharacter = null;
-    var lookingFor = ":";
-    var buffer = "";
-    var addToBuffer = false;
-    var loopCoutner = 0;
-    var cutPoint = 0;
-    var loopTwoCounter = 0;
 
-    for (var i of json){
-        var object = json;
-        loopCoutner ++;
-        var skip = false;
-        if(inAString){
-            if(i === stringCharacter){
-                inAString = false;
-                stringCharacter = null;
-                skip = true;
+//This function does not work yet, I'm currently working on it
+//When its finished, it will take values like: 10 and turn them into "10" so that the previous function will work
+const qoutationMe = (json) =>{
+
+    var object = json;
+    var miniBuffer = [];
+    var buffer = "";
+    var engaged = false;
+    var cutPoint = 0;
+    var exitPoint = 0;
+    var sliceOne = "";
+    var sliceTwo = "";
+
+    for (var i in json){
+        i = Number(i);
+        if (i === 0){
+            miniBuffer[0] = json[i];
+            miniBuffer[1] = json[i+1];
+        }else{
+            miniBuffer[0] = miniBuffer[1];
+            miniBuffer[1] = json[i];
+        }
+        if(engaged == false){
+            if(miniBuffer[0] == ":" || miniBuffer[0] == ","){
+                if(miniBuffer[1] != "'" && miniBuffer[1] != '"' ){
+                    buffer += json[i];
+                    engaged = true;
+                    cutPoint = i;
+                }
             }
         }else{
-            if(i == lookingFor){
-                if(addToBuffer === false){
-                    addToBuffer = true
-                    cutPointOne = loopCoutner;
-                }else{
-                    addToBuffer = false
-                    for(var ii = 0; ii <= buffer.length +2; ii++){
-                        if(ii === 0){
-                            object[cutPoint + loopTwoCounter] = '"'
-                        }else if(ii === buffer.length+2){
-                            object[cutPoint + loopTwoCounter] = '"'
-                        }else{
-                            object[cutPoint + loopTwoCounter] = buffer[loopTwoCounter];
-                        }
-                        loopTwoCounter ++;
-                    }
-                    cutPoint = 0;
-                    loopTwoCounter = 0;
+            if(json[i] != "," && json[i] != ':'){
+                buffer += json[i];
+            }else{
+                engaged = false;
+                object[cutPoint] = '"'
+                for(var ii in buffer){
+                    ii = Number(ii)
+                    object[cutPoint+ii] = buffer[ii]
+                    exitPoint = ii;
                 }
-                skip = true;
-                if(lookingFor = ","){
-                    lookingFor = ":"
-                }else{
-                    lookingFor = ","
-                }
+                sliceOne = object.slice(0, cutPoint);
+                sliceTwo = object.slice(cutPoint, object.length-1);
+                sliceOne.push('"');
+                object - sliceOne.concat(sliceTwo)
             }
         }
         
-
-        if(skip === false){
-            if(i == '"' || i == "'"){
-                inAString = true;
-                stringCharacter = i;
-                
-            }
-            if(addToBuffer === true && i != lookingFor){
-                buffer +=i
-            }
-        }
+        
+        
     }
-    return object
+
+    return object;
 }
 
-console.log(qoutationMe(jstring));
+//Does not work
+//console.log(qoutationMe(jstring));
+
+//works
+console.clear();
+console.log('\n');
+console.log("Keys:");
+console.log(stringMe(jstring)[0]);
+console.log('\n');
+console.log("Values:");
+console.log(stringMe(jstring)[1]);
+console.log("\n");
