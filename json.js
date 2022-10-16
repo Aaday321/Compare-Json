@@ -1,9 +1,10 @@
 //
+
 /*
 
     Collaborators:
-        Adeyemi Ritchards
-        Rider Cogswell
+        Adeyemi Ritchards | https://github.com/Aaday321
+        Rider Cogswell    | https://github.com/RiderCogswell
 
 */
 
@@ -74,10 +75,7 @@ const compare = (objArray) =>{
     
     console.clear();
     console.log(`\n`);
-    var counter = 0;
-
-    
-    
+    var counter = new Number();
     const K_V = makeObjArray(objArray)
     
 
@@ -181,7 +179,7 @@ const getLongerIndex = (objs_converted) =>{
 [iterate Objects]     [0: Keys, 1: Values]    [iterate through Items]
 */
 
-    var counter1 = new Number(0);
+    var counter1 = new Number();
     var counter2 = new Number();
     for(var k in objs_converted[0][0])counter1++
     for(var k in objs_converted[1][0])counter2++
