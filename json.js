@@ -1,8 +1,14 @@
 //
-//Almost-proud author: Adeyemi Ritchards 😎
-//
+/*
 
-//Purpose
+    Collaborators:
+        Adeyemi Ritchards
+        Rider Cogswell
+
+*/
+
+
+//PURPOSE
 /*
     The compare function can take any 2 JSON objects and return them in an ultra readable way
 
@@ -10,27 +16,14 @@
     to runn program user Node <File_path>/json.js
 */
 
-//CURRENT ISSUES/ BUGS
-/*
-    Right now, it will not read the last value of the second object.
-    (Meaing the object with index 1 in the OBJ_ARRY)
-    I don't know why!!!!
-
-    What's really interesting is the if you use obj2 instead of obj1 on line 67
-     then it can read the last value of the second object, but not of the first
-
-    In really hope this issue doesn't have to do with objects being only semi-iterable
-    cuz that would mean the entire aproach of the project is off... I don't think that
-    that is the case... just thinking outloud here
-*/
 
 //NEXT STEPS:
 /*
     Right now the code only works with 2 objects, in the future,
     I would like it to work with any number of objects
 
-    Once the code is ready to ship, the last thing that I will do is make
-    it be able to read from standard input to be passed any number of json files
+    Once the code is ready, the last thing that I will do is make
+    it be able to read from standard input and be passed any number of json files
 */
 
 
@@ -72,86 +65,103 @@ const NOTEND = ""
 const KEY = "KEY: "
 const VALUE = "VALUE: "
 
+
+
+
+
 //Main function
-const compare = (obj1, obj2) =>{
+const compare = (objArray) =>{
     
     console.clear();
     console.log(`\n`);
-    var counter = 0
-    var subloopCounter = 0
-    
-    for(prop in obj1){
-        
-        const KEY_1 = Object.keys(obj1)[counter]
-        const VALUE_1 = obj1[prop]
-        const KEY_2 = Object.keys(obj2)[counter]
-        const VALUE_2 = obj2[prop]
+    var counter = 0;
 
+    
+    
+    const K_V = makeObjArray(objArray)
+    
+
+    /*
+        For every object in the object array,
+        make a an array that holds 2 arrays. 1 of keys. the other of values.
+    */
+    
+    for(var i = 0; i < getLongerIndex(K_V); i++){
+        
+        //------------------------K_V ARRAY KEY------------------------//
+        /*
+              [OBJ]             [KEYS or Values]              [item]
+        [iterate Objects]     [0: Keys, 1: Values]    [iterate through Items]
+        */
        
-        
-        if (Object.keys(obj1)[counter] === Object.keys(obj2)[counter]) { //if keys match
-
-            if (obj1[prop] == obj2[prop]) { // if values also match
-                console.log(`${counter+1})${GREEN} KEY & VALUE MATCH: ${CLEAR}`)
+        if (K_V[0][0][i] == K_V[1][0][i]) { //if keys match
+            
+            if (K_V[0][1][i] == K_V[1][1][i]) { // if values also match
+                console.log(`${counter+1})${CLEAR} KEY & VALUE MATCH: ${CLEAR}`)
                 
+                //PRINT KEYS
                 printItem({
-                    TYPE: KEY,          //<- Field or Vlaue
-                    DATA_1: KEY_1,      //<- Data from first obj
-                    KEY_COLOR: BLUE,    //<- Feild Colorer
-                    DATA_COLOR: YELLOW, //<- Data Colorer
-                    END: NOTEND         //<- Don't make new line 
-                })   //Prints Feild
+                    TYPE: KEY,               //<- Field or Vlaue
+                    DATA_1: K_V[0][0][i],    //<- Key from first obj
+                    KEY_COLOR: BLUE,         //<- Feild Colorer
+                    DATA_COLOR: YELLOW,      //<- Data Colorer
+                    END: NOTEND              //<- Don't make new line 
+                })
 
+                //PRINT VALUES
                 printItem({
-                    TYPE: VALUE,        //<- Field or Vlaue
-                    DATA_1: VALUE_1,    //<- Data from first obj
-                    KEY_COLOR: BLUE,    //<- Feild Colorer
-                    DATA_COLOR: YELLOW, //<- Data Colorer
-                    END: END            //<- Make new line
-                })   //Prints
+                    TYPE: VALUE,              //<- Field or Vlaue
+                    DATA_1: K_V[0][1][i],     //<- Value from first obj
+                    KEY_COLOR: BLUE,          //<- Feild Colorer
+                    DATA_COLOR: YELLOW,       //<- Data Colorer
+                    END: END                  //<- Make new line
+                })
     
-            }else if(obj1[prop] !== obj2[prop]){
+            }else{ //if values does not match
 
                 console.log(`${counter+1}) KEY MATCH ONLY: `)
 
+                //PRINT KEYS
                 printItem({
-                    TYPE: KEY,          //<- Field or Vlaue
-                    DATA_1: KEY_1,      //<- Data from first obj
-                    KEY_COLOR: BLUE,    //<- Feild Colorer
-                    DATA_COLOR: YELLOW, //<- Data Colorer
-                    END: NOTEND         //<- Don't make new line
-                })   //Prints Feild
-               
+                    TYPE: KEY,               //<- Field or Vlaue
+                    DATA_1: K_V[0][0][i],    //<- Key from first obj
+                    KEY_COLOR: BLUE,         //<- Feild Colorer
+                    DATA_COLOR: YELLOW,      //<- Data Colorer
+                    END: NOTEND              //<- Don't make new line
+                })
+                
+
+                //PRINT VALUES
                 printItem({
-                    TYPE: VALUE,         //<- Field or Vlaue
-                    DATA_1: VALUE_1,     //<- Data from first obj
-                    DATA_2: VALUE_2,     //<- Data from second obj
-                    KEY_COLOR: BLUE,     //<- Feild Colorer
-                    DATA_COLOR: YELLOW,  //<- Data Colorer
-                    END: END             //<- New line feature
+                    TYPE: VALUE,              //<- Field or Vlaue
+                    DATA_1: K_V[0][1][i],     //<- Data from first obj
+                    DATA_2: K_V[1][1][i],     //<- Data from second obj
+                    KEY_COLOR: BLUE,          //<- Feild Colorer
+                    DATA_COLOR: YELLOW,       //<- Data Colorer
+                    END: END                  //<- New line feature
                 }) 
-            }else{
-                console.log(`this test failed\n`);
             }
         }else{
-            console.log(`${counter}) KEY MISMATCH:`);
+            console.log(`${counter}) KEY MISMATCH:`); // If Keys do not match
 
+            //PRINT KEYS
             printItem({
-                TYPE: KEY,              //<- Field or Vlaue
-                DATA_1: KEY_1,          //<- Data from first obj
-                DATA_2: KEY_2,          //<- Data from second obj
-                KEY_COLOR: RED,         //<- Feild Colorer
-                DATA_COLOR: YELLOW,     //<- Data Colorer
-                END: NOTEND             //<- New line feature
+                TYPE: KEY,                     //<- Field or Vlaue
+                DATA_1: K_V[0][0][i],          //<- keeys from first obj
+                DATA_2: K_V[1][0][i],          //<- kwys from second obj
+                KEY_COLOR: RED,                //<- Feild Colorer
+                DATA_COLOR: YELLOW,            //<- Data Colorer
+                END: NOTEND                    //<- New line feature
             }) 
             
+            //PRINT VALUES
             printItem({
-                TYPE: VALUE,            //<- Field or Vlaue
-                DATA_1: VALUE_1,        //<- Data from first obj
-                DATA_2: VALUE_2,        //<- Data from second obj
-                KEY_COLOR: RED,         //<- Feild Colorer
-                DATA_COLOR: YELLOW,     //<- Data Colorer
-                END: END                //<- New line feature
+                TYPE: VALUE,                    //<- Field or Vlaue
+                DATA_1: K_V[0][1][i],           //<- Data from first obj
+                DATA_2: K_V[1][1][i],           //<- Data from second obj
+                KEY_COLOR: RED,                 //<- Feild Colorer
+                DATA_COLOR: YELLOW,             //<- Data Colorer
+                END: END                        //<- New line feature
             }) 
         }
         counter++
@@ -159,39 +169,53 @@ const compare = (obj1, obj2) =>{
     console.log(`\n\n`);  
 }
 
+
+
+
 //Returns the index of the longer obj 
-//BREAKS ENTIRE FILE TO USE ARRAY OF OBJS
+const getLongerIndex = (objs_converted) =>{
+
+//------------------------K_V ARRAY KEY------------------------//
 /*
-const getLongerIndex = (OBJ_ARRY) =>{
-    var counter1 = 0
-    var counter2 = 0
-    for(k in obj1)counter1++
-    for(k in obj2)counter2++
-    
+     [OBJ]              [KEYS or Values]              [item]
+[iterate Objects]     [0: Keys, 1: Values]    [iterate through Items]
+*/
+
+    var counter1 = new Number(0);
+    var counter2 = new Number();
+    for(var k in objs_converted[0][0])counter1++
+    for(var k in objs_converted[1][0])counter2++
+
     if(counter1 < counter2){
-        return 1
+        return counter1
     }else{
-        return 0
+        return counter2
     }
 }
-*/
+
+
+
 
 //Handles ALL output😎
 const printItem = (PARAMS) =>{
 
+
     /*
-        here data can be a key or a value.
+        Here "DATA" can be either a key or a value.
         meaning that PARAMS.DATA gets passed a key sometimes and a value other times.
     */
 
-    var shortTAB=""
-    var twoItemTAB=""
-    var s = ""
-    var item2 = ""
+    var shortTAB = "";
+    var twoItemTAB = "";
+    var s = "";
+    var item2 = "";
 
     if(PARAMS.DATA_2){twoItemTAB = "\t| "; s="\b\bS: "; item2 = PARAMS.DATA_2}
-    //if(PARAMS.DATA_1=="")PARAMS.DATA_1="*EMPTY*"
-    //if(item2)if(item2=="")item2="*EMPTY*"
+
+    //Empty checking is not working 😭
+        //if(PARAMS.DATA_1=="")PARAMS.DATA_1="*EMPTY*"
+        //if(item2)if(item2=="")item2="*EMPTY*"
+
     if(PARAMS.DATA)if(PARAMS.DATA_1.length < 3)TAB = "\t"
 
     console.log(
@@ -210,4 +234,38 @@ const printItem = (PARAMS) =>{
     );
 }
 
-compare(json, alsoJson)
+
+
+
+
+const makeObjArray = (objArray) =>{
+
+
+//------------------------K_V ARRAY KEY------------------------//
+/*
+    [OBJ]             [KEYS or Values]              [item]
+[iterate Objects]     [0: Keys, 1: Values]    [iterate through Items]
+*/
+
+    var K_V = new Array();
+    var lCntr = new Number();
+
+    for(var i of objArray){
+        
+        K_V.push(
+
+            [
+                [/* Keys */],
+                [/* Values */]
+            ]
+        )
+
+        K_V[lCntr][0] = Object.keys(i);   // Pull key from object and add it to array
+        K_V[lCntr][1] = Object.values(i); // Pull value from object and add it to array
+        lCntr++;
+    }
+
+    return K_V;
+}
+
+compare([json, alsoJson])
